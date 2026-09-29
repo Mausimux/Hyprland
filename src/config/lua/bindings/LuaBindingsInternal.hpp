@@ -78,6 +78,7 @@ namespace Config::Lua::Bindings::Internal {
         {"min_size", []() -> ILuaConfigValue* { return new CLuaConfigExpressionVec2(); }, WE::WINDOW_RULE_EFFECT_MIN_SIZE},
         {"border_color", []() -> ILuaConfigValue* { return new CLuaConfigGradient(CHyprColor(0xFF000000)); }, WE::WINDOW_RULE_EFFECT_BORDER_COLOR},
         {"persistent_size", []() -> ILuaConfigValue* { return new CLuaConfigBool(false); }, WE::WINDOW_RULE_EFFECT_PERSISTENT_SIZE},
+        {"persistent_position", []() -> ILuaConfigValue* { return new CLuaConfigBool(false); }, WE::WINDOW_RULE_EFFECT_PERSISTENT_POSITION},
         {"allows_input", []() -> ILuaConfigValue* { return new CLuaConfigBool(false); }, WE::WINDOW_RULE_EFFECT_ALLOWS_INPUT},
         {"dim_around", []() -> ILuaConfigValue* { return new CLuaConfigBool(false); }, WE::WINDOW_RULE_EFFECT_DIM_AROUND},
         {"decorate", []() -> ILuaConfigValue* { return new CLuaConfigBool(true); }, WE::WINDOW_RULE_EFFECT_DECORATE},

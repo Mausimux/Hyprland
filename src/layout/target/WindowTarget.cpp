@@ -331,7 +331,7 @@ std::expected<SGeometryRequested, eGeometryFailure> CWindowTarget::desiredGeomet
     if (m_window->backend().isX11() && (CLIENT_GEOMETRY.positionAuthoritative || DESIRED_GEOM.pos() != Vector2D(0, 0)))
         requested.pos = DESIRED_GEOM.pos() + (DESIRED_GEOM.size() - requested.size) / 2.F;
 
-    const auto STOREDSIZE = m_window->m_ruleApplicator->persistentSize().valueOrDefault() ? Desktop::floatState()->get(m_window.lock()) : std::nullopt;
+    const auto STOREDSIZE = m_window->m_ruleApplicator->persistentSize().valueOrDefault() ? Desktop::floatState()->getSize(m_window.lock()) : std::nullopt;
 
     if (STOREDSIZE)
         requested.size = clampSizeForDesired(*STOREDSIZE);

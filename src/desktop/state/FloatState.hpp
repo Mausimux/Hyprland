@@ -48,11 +48,14 @@ namespace Desktop {
         CFloatStateCache()  = default;
         ~CFloatStateCache() = default;
 
-        void                    remember(PHLWINDOW window, const Vector2D& size);
-        std::optional<Vector2D> get(PHLWINDOW window);
+        void                    rememberSize(PHLWINDOW window, const Vector2D& size);
+        void                    rememberPosition(PHLWINDOW window, const Vector2D& position);
+        std::optional<Vector2D> getSize(PHLWINDOW window);
+        std::optional<Vector2D> getPosition(PHLWINDOW window);
 
       private:
         std::unordered_map<SFloatCacheKey, Vector2D> m_storedSizes;
+        std::unordered_map<SFloatCacheKey, Vector2D> m_storedPositions;
     };
 
     UP<CFloatStateCache>& floatState();
