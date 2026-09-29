@@ -1296,8 +1296,8 @@ void CWindow::mapWindow() {
 
         if (m_ruleApplicator->static_.fullscreenStateClient || m_ruleApplicator->static_.fullscreenStateInternal) {
             requestedFSState = Fullscreen::SFullscreenMode{
-                .internal = sc<Fullscreen::eFullscreenMode>(m_ruleApplicator->static_.fullscreenStateInternal.value_or(0)),
-                .client   = sc<Fullscreen::eFullscreenMode>(m_ruleApplicator->static_.fullscreenStateClient.value_or(0)),
+                     .internal = sc<Fullscreen::eFullscreenMode>(m_ruleApplicator->static_.fullscreenStateInternal.value_or(0)),
+                     .client   = sc<Fullscreen::eFullscreenMode>(m_ruleApplicator->static_.fullscreenStateClient.value_or(0)),
             };
         }
 
@@ -1612,9 +1612,16 @@ void CWindow::unmapWindow() {
     IPC::Socket2::sock()->postEvent({"closewindow", std::format("{:x}", m_self.lock())});
     Event::bus()->m_events.window.close.emit(m_self.lock());
 
-    if (m_target->floating() && !m_backend->isX11() && m_ruleApplicator->persistentSize().valueOrDefault()) {
-        LOG(Log::DEBUG, "storing floating size {}x{} for window {}::{} on close", m_realSize->value().x, m_realSize->value().y, m_metadata->appID(), m_metadata->title());
-        Desktop::floatState()->remember(m_self.lock(), m_realSize->value());
+    if (m_target->floating() && !m_backend->isX11()) {
+        if (m_ruleApplicator->persistentSize().valueOrDefault()) {
+            LOG(Log::DEBUG, "storing floating size {}x{} for window {}::{} on close", m_realSize->value().x, m_realSize->value().y, m_metadata->appID(), m_metadata->title());
+            Desktop::floatState()->rememberSize(m_self.lock(), m_realSize->value());
+        }
+        if (m_ruleApplicator->persistentPosition().valueOrDefault()) {
+            LOG(Log::DEBUG, "storing floating position {},{} for window {}::{} on close", m_realPosition->value().x, m_realPosition->value().y, m_metadata->appID(),
+                m_metadata->title());
+            Desktop::floatState()->rememberPosition(m_self.lock(), m_realPosition->value());
+        }
     }
 
     const auto SWALLOW_UNMAP_RESULT    = m_swallowing->onUnmap(IS_CURRENT_WINDOW_FS ? std::optional(CURRENT_WINDOW_FS_MODES.internal) : std::nullopt, CURRENT_FS_LAYOUT_HANDLED);
