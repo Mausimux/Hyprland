@@ -8,6 +8,7 @@
 #include "../../../../config/ConfigValue.hpp"
 #include "../../../../Compositor.hpp"
 #include "../../../../desktop/state/WindowState.hpp"
+#include "../../../../desktop/state/FloatState.hpp"
 #include "../../../../output/Monitor.hpp"
 #include "../../../../state/MonitorState.hpp"
 
@@ -82,6 +83,14 @@ void CDefaultFloatingAlgorithm::newTarget(SP<ITarget> target) {
             windowGeometry.x = POS.x;
             windowGeometry.y = POS.y;
             posOverridden    = true;
+        }
+
+        if (WINDOW->m_ruleApplicator->persistentPosition().valueOrDefault()) {
+            if (const auto STOREDPOS = Desktop::floatState()->getPosition(WINDOW); STOREDPOS) {
+                windowGeometry.x = STOREDPOS->x;
+                windowGeometry.y = STOREDPOS->y;
+                posOverridden    = true;
+            }
         }
     } else if (target->lastFloatingSize().x > 5 && target->lastFloatingSize().y > 5) {
         windowGeometry.w = target->lastFloatingSize().x;
