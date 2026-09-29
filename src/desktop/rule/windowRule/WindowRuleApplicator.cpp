@@ -56,7 +56,8 @@ std::unordered_set<CWindowRuleEffectContainer::storageType> CWindowRuleApplicato
             std::pair{std::ref(m_xray), [this] { return xrayEffect(); }}, std::pair{std::ref(m_renderUnfocused), [this] { return renderUnfocusedEffect(); }},
             std::pair{std::ref(m_noFollowMouse), [this] { return noFollowMouseEffect(); }}, std::pair{std::ref(m_noScreenShare), [this] { return noScreenShareEffect(); }},
             std::pair{std::ref(m_noVRR), [this] { return noVRREffect(); }}, std::pair{std::ref(m_noAutoHDR), [this] { return noAutoHDREffect(); }},
-            std::pair{std::ref(m_persistentSize), [this] { return persistentSizeEffect(); }}, std::pair{std::ref(m_stayFocused), [this] { return stayFocusedEffect(); }},
+            std::pair{std::ref(m_persistentSize), [this] { return persistentSizeEffect(); }},
+            std::pair{std::ref(m_persistentPosition), [this] { return persistentPositionEffect(); }}, std::pair{std::ref(m_stayFocused), [this] { return stayFocusedEffect(); }},
             std::pair{std::ref(m_idleInhibitMode), [this] { return idleInhibitModeEffect(); }}, std::pair{std::ref(m_confinePointer), [this] { return confinePointerEffect(); }},
             std::pair{std::ref(m_noXdgDrags), [this] { return noXdgDragsEffect(); }}, std::pair{std::ref(m_borderSize), [this] { return borderSizeEffect(); }},
             std::pair{std::ref(m_rounding), [this] { return roundingEffect(); }}, std::pair{std::ref(m_roundingPower), [this] { return roundingPowerEffect(); }},
@@ -130,6 +131,11 @@ CWindowRuleApplicator::SRuleResult CWindowRuleApplicator::applyDynamicRule(const
             case WINDOW_RULE_EFFECT_PERSISTENT_SIZE: {
                 m_persistentSize.first.set(std::get<bool>(value), Types::PRIORITY_WINDOW_RULE);
                 m_persistentSize.second |= rule->getPropertiesMask();
+                break;
+            }
+            case WINDOW_RULE_EFFECT_PERSISTENT_POSITION: {
+                m_persistentPosition.first.set(std::get<bool>(value), Types::PRIORITY_WINDOW_RULE);
+                m_persistentPosition.second |= rule->getPropertiesMask();
                 break;
             }
             case WINDOW_RULE_EFFECT_ANIMATION: {
